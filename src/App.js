@@ -8,33 +8,47 @@ function App() {
   const rotate = keyframes`
 0%{
   transform: rotate(0deg);
-  background-color: blue;
+  border-radius: 0px;
 }
 50%{
   transform: rotate(180deg);
-  background-color: red;
+  border-radius: 100px;
 }
 100%{
   transform: rotate(360deg);
-  background-color: green;
+  border-radius: 0px;
 }
 `;
 
+  const Emoji = styled.span`
+    font-size: 36px;
+  `;
+
   const Box = styled.div`
-    height: 10px;
-    width: 10px;
-    margin-right: 10px;
+    height: 200px;
+    width: 200px;
     background-color: tomato;
-    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     animation: ${rotate} 1s linear infinite;
-    animation-delay: ${(props) => props.delay}s;
+    ${Emoji} {
+      font-size: 36px;
+      transition: all 1s ease-in;
+      &:hover {
+        font-size: 80px;
+      }
+      &:active {
+        opacity: 0;
+      }
+    }
   `;
 
   return (
     <Wrapper as="header">
-      <Box delay={0.2} />
-      <Box delay={0.4} />
-      <Box delay={0.6} />
+      <Box>
+        <Emoji as="a">😉</Emoji>
+      </Box>
     </Wrapper>
   );
 }
