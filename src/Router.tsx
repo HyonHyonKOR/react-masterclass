@@ -3,7 +3,9 @@ import Home from "./screens/Home";
 import About from "./screens/About";
 import NotFound from "./screens/NotFound";
 import Root from "./Root";
+import User from "./screens/users/User";
 import ErrorComponents from "./components/ErrorComponent";
+import Followers from "./screens/users/Followers";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,16 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
+      },
+      {
+        path: "users/:userId",
+        element: <User />,
+        children: [
+          {
+            path: "followers",
+            element: <Followers />,
+          },
+        ],
       },
     ],
     errorElement: <NotFound />,
