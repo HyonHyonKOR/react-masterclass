@@ -1,16 +1,34 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
+import App from "./App";
 import Coins from "./routes/Coins";
 import Coin from "./routes/Coin";
+import Chart from "./routes/Chart";
+import Price from "./routes/Price";
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "",
+        element: <Coins />,
+      },
+      {
+        path: ":id",
+        element: <Coin />,
+        children: [
+          {
+            path: "chart",
+            element: <Chart />,
+          },
+          {
+            path: "price",
+            element: <Price />,
+          },
+        ],
+      },
+    ],
+  },
+]);
 
-const Router = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Coins />} />
-        <Route path="/:coinId" element={<Coin />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
-
-export default Router;
+export default router;
