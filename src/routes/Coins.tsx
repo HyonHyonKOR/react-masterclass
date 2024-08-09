@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -79,7 +79,7 @@ const Coins = () => {
         <CoinList>
           {coins.map((coin) => (
             <Coin key={coin.id}>
-              <Link to={`/${coin.id}`} state={coin}>
+              <Link to={`${coin.id}`} state={coin}>
                 <Img
                   src={`https://static.coinpaprika.com/coin/${coin.id}/logo.png`}
                 ></Img>

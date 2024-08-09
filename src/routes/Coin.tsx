@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useLocation, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -32,6 +32,7 @@ const Overview = styled.div`
   padding: 10px 20px;
   border-radius: 10px;
 `;
+
 const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
@@ -43,6 +44,7 @@ const OverviewItem = styled.div`
     margin-bottom: 5px;
   }
 `;
+
 const Description = styled.p`
   margin: 20px 0px;
 `;
@@ -78,6 +80,7 @@ const Coin = () => {
   const { coinId } = useParams();
   const [loading, setLoading] = useState(true);
   const { state } = useLocation() as RouteState;
+  console.log(state);
   const [coinInfo, setCoinInfo] = useState<InfoData>();
   const [priceInfo, setPriceInfo] = useState<PriceData>();
   useEffect(() => {
@@ -94,18 +97,20 @@ const Coin = () => {
         .slice(0, 100)
         .find((item: InfoData) => (item.id = `${coinId}`));
       setCoinInfo(coinData);
+      console.log(coinData);
 
-      console.log(priceDataList);
       const priceData: PriceData = priceDataList[0];
-      console.log(priceData);
       setPriceInfo(priceData);
       setLoading(false);
     })();
-  }, []);
+  }, [coinId]);
+
   return (
     <Container>
       <Header>
-        <Title>{state?.name || "Loading.."}</Title>
+        <Title>
+          {state?.name ? state.name : loading ? "Loading.." : coinInfo?.name}
+        </Title>
       </Header>
       {loading ? (
         <Loader>"Loading..."</Loader>
@@ -126,7 +131,7 @@ const Coin = () => {
             </OverviewItem>
           </Overview>
           <Description>
-            {state?.name} is a {coinInfo?.type}.Lorem ipsum dolor sit amet
+            {coinInfo?.name} is a {coinInfo?.type}.Lorem ipsum dolor sit amet
             consectetur, adipisicing elit. Impedit fugit maxime, culpa unde sint
             delectus quo enim veniam magnam amet commodi dicta sunt cum
             excepturi dolore, est nam, ab nulla? Lorem ipsum dolor sit amet,
@@ -144,6 +149,8 @@ const Coin = () => {
               <span>{priceInfo?.low}</span>
             </OverviewItem>
           </Overview>
+          <Link to={`chart`}>Chart</Link>
+          <Link to={`price`}>Price</Link>
         </>
       )}
       <Outlet />
