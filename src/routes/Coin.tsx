@@ -45,6 +45,26 @@ const OverviewItem = styled.div`
   }
 `;
 
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0px;
+  gap: 10px;
+`;
+
+const Tab = styled.span`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 7px 0px;
+  border-radius: 10px;
+  a {
+    display: block;
+  }
+`;
+
 const Description = styled.p`
   margin: 20px 0px;
 `;
@@ -60,8 +80,6 @@ interface InfoData {
   name: string;
   symbol: string;
   rank: number;
-  is_new: boolean;
-  is_active: boolean;
   type: string;
 }
 
@@ -80,7 +98,6 @@ const Coin = () => {
   const { coinId } = useParams();
   const [loading, setLoading] = useState(true);
   const { state } = useLocation() as RouteState;
-  console.log(state);
   const [coinInfo, setCoinInfo] = useState<InfoData>();
   const [priceInfo, setPriceInfo] = useState<PriceData>();
   useEffect(() => {
@@ -95,9 +112,9 @@ const Coin = () => {
       ).json();
       const coinData: InfoData = coinDataList
         .slice(0, 100)
-        .find((item: InfoData) => (item.id = `${coinId}`));
+        .find((item: InfoData) => item.id === `${coinId}`);
+
       setCoinInfo(coinData);
-      console.log(coinData);
 
       const priceData: PriceData = priceDataList[0];
       setPriceInfo(priceData);
@@ -149,8 +166,14 @@ const Coin = () => {
               <span>{priceInfo?.low}</span>
             </OverviewItem>
           </Overview>
-          <Link to={`chart`}>Chart</Link>
-          <Link to={`price`}>Price</Link>
+          <Tabs>
+            <Tab>
+              <Link to={`chart`}>Chart</Link>
+            </Tab>
+            <Tab>
+              <Link to={`price`}>Price</Link>
+            </Tab>
+          </Tabs>
         </>
       )}
       <Outlet />
