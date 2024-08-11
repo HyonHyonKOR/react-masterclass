@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoins } from "./api";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 20px 0;
@@ -67,6 +68,9 @@ const Coins = () => {
 
   return (
     <Container>
+      <Helmet>
+        <title>Coin Tracker</title>
+      </Helmet>
       <Header>
         <Title>비트코인</Title>
       </Header>

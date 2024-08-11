@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import styled from "styled-components";
 import { fetchCoinInfo, fetchCoinPrice } from "./api";
+import { Helmet } from "react-helmet";
 
 const Container = styled.div`
   padding: 20px 0;
@@ -20,11 +21,23 @@ const Header = styled.header`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 `;
 
 const Title = styled.h1`
   font-size: 48px;
   color: ${(props) => props.theme.accentColor};
+`;
+
+const BackBtn = styled.button`
+  position: absolute;
+  border: none;
+  left: 0px;
+  bottom: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-size: 20px;
+  color: ${(props) => props.theme.textColor};
+  cursor: pointer;
 `;
 
 const Loader = styled.div`
@@ -126,10 +139,18 @@ const Coin = () => {
   const loading = infoloading || tickersLoading;
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? "Loading.." : InfoData?.name}
+        </title>
+      </Helmet>
       <Header>
         <Title>
           {state?.name ? state.name : loading ? "Loading.." : InfoData?.name}
         </Title>
+        <BackBtn>
+          <Link to={"/"}>&larr;</Link>
+        </BackBtn>
       </Header>
       {loading ? (
         <Loader>"Loading..."</Loader>

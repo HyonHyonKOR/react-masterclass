@@ -35,7 +35,10 @@ const Chart = () => {
           series={[
             {
               name: "sales",
-              data: data?.map((price) => Number(price.close)) ?? [],
+              data:
+                Array.isArray(data) && data.length > 0
+                  ? data?.map((price) => Number(price.close))
+                  : [],
             },
           ]}
           options={{
@@ -64,9 +67,11 @@ const Chart = () => {
               labels: { show: false },
               type: "datetime",
               categories:
-                data?.map((price) =>
-                  new Date(price.time_close * 1000).toUTCString()
-                ) ?? [],
+                Array.isArray(data) && data.length > 0
+                  ? data?.map((price) =>
+                      new Date(price.time_close * 1000).toUTCString()
+                    )
+                  : [],
             },
             fill: {
               type: "gradient",
