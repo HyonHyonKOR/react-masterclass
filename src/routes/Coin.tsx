@@ -178,8 +178,9 @@ const Coin = () => {
           </Tabs>
         </>
       )}
-      <Outlet />
+      <Outlet context={{ coinId }} />
     </Container>
   );
 };
+
 export default Coin;

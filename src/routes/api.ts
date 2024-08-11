@@ -14,6 +14,14 @@ export const fetchCoinPrice = async (coinId: string | undefined) => {
   const response = await fetch(
     `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
   );
-  const coinInfoList: any[] = await response.json();
-  return coinInfoList[0];
+  const coinPriceList: any[] = await response.json();
+  return coinPriceList[0];
+};
+
+export const fetchCoinPriceFlow = async (coinId: string | undefined) => {
+  const response = await fetch(
+    `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
+  );
+  const coinPriceFlowList: any[] = await response.json();
+  return coinPriceFlowList;
 };
