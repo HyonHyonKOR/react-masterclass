@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Link,
   Outlet,
@@ -7,6 +7,7 @@ import {
   useParams,
 } from "react-router-dom";
 import styled from "styled-components";
+import { fetchCoinInfo, fetchCoinPrice } from "./api";
 
 const Container = styled.div`
   padding: 20px 0;
@@ -43,6 +44,7 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 33%;
   span:first-child {
     font-size: 10px;
     font-weight: 400;
@@ -69,6 +71,7 @@ const Tab = styled.span<{ $isAcitve: boolean }>`
   color: ${(props) =>
     props.$isAcitve ? props.theme.accentColor : props.theme.textColor};
   a {
+    padding: 7px 0px;
     display: block;
   }
 `;
@@ -88,6 +91,8 @@ interface InfoData {
   name: string;
   symbol: string;
   rank: number;
+  is_new: boolean;
+  is_active: boolean;
   type: string;
 }
 
@@ -104,42 +109,26 @@ interface PriceData {
 
 const Coin = () => {
   const { coinId } = useParams();
-  const [loading, setLoading] = useState(true);
   const { state } = useLocation() as RouteState;
-  const [coinInfo, setCoinInfo] = useState<InfoData>();
-  const [priceInfo, setPriceInfo] = useState<PriceData>();
   const priceMatch = useMatch("/:coinId/price");
   const chartMatch = useMatch("/:coinId/chart");
 
-  console.log(priceMatch);
+  const { isLoading: infoloading, data: InfoData } = useQuery<InfoData>({
+    queryKey: ["info", coinId],
+    queryFn: () => fetchCoinInfo(coinId),
+  });
 
-  useEffect(() => {
-    (async () => {
-      const coinDataList = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins`)
-      ).json();
-      const priceDataList = await (
-        await fetch(
-          `https://ohlcv-api.nomadcoders.workers.dev?coinId=${coinId}`
-        )
-      ).json();
-      const coinData: InfoData = coinDataList
-        .slice(0, 100)
-        .find((item: InfoData) => item.id === `${coinId}`);
+  const { isLoading: tickersLoading, data: PriceData } = useQuery<PriceData>({
+    queryKey: ["price", coinId],
+    queryFn: () => fetchCoinPrice(coinId),
+  });
 
-      setCoinInfo(coinData);
-
-      const priceData: PriceData = priceDataList[0];
-      setPriceInfo(priceData);
-      setLoading(false);
-    })();
-  }, [coinId]);
-
+  const loading = infoloading || tickersLoading;
   return (
     <Container>
       <Header>
         <Title>
-          {state?.name ? state.name : loading ? "Loading.." : coinInfo?.name}
+          {state?.name ? state.name : loading ? "Loading.." : InfoData?.name}
         </Title>
       </Header>
       {loading ? (
@@ -149,19 +138,19 @@ const Coin = () => {
           <Overview>
             <OverviewItem>
               <span>Rank:</span>
-              <span>{coinInfo?.rank}</span>
+              <span>{InfoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Symbol:</span>
-              <span>{coinInfo?.symbol}</span>
+              <span>{InfoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Type:</span>
-              <span>{coinInfo?.type}</span>
+              <span>{InfoData?.type}</span>
             </OverviewItem>
           </Overview>
           <Description>
-            {coinInfo?.name} is a {coinInfo?.type}.Lorem ipsum dolor sit amet
+            {InfoData?.name} is a {InfoData?.type}.Lorem ipsum dolor sit amet
             consectetur, adipisicing elit. Impedit fugit maxime, culpa unde sint
             delectus quo enim veniam magnam amet commodi dicta sunt cum
             excepturi dolore, est nam, ab nulla? Lorem ipsum dolor sit amet,
@@ -172,11 +161,11 @@ const Coin = () => {
           <Overview>
             <OverviewItem>
               <span>Max Price:</span>
-              <span>{priceInfo?.high}</span>
+              <span>{PriceData?.high}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Low Price:</span>
-              <span>{priceInfo?.low}</span>
+              <span>{PriceData?.low}</span>
             </OverviewItem>
           </Overview>
           <Tabs>
