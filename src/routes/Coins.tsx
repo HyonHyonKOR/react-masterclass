@@ -27,6 +27,8 @@ const Coin = styled.li`
     align-items: center;
     padding: 20px;
     transition: color 0.2s ease-in;
+    color: #313335;
+
     &:hover {
       color: ${(props) => props.theme.accentColor};
     }

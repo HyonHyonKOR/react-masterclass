@@ -1,5 +1,9 @@
 import { createGlobalStyle } from "styled-components";
 import { Outlet } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
+import { darkTheme, lightTheme } from "./theme";
+import { useRecoilValue } from "recoil";
+import { isDarkAtom } from "./routes/atoms";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -46,7 +50,7 @@ body {
 
 a{
   text-decoration: none;
-  color:inherit;
+  color: inherit;
 }
 menu, ol, ul {
   list-style: none;
@@ -66,10 +70,13 @@ table {
 `;
 
 function App() {
+  const isDark = useRecoilValue(isDarkAtom);
   return (
     <>
-      <GlobalStyle />
-      <Outlet />
+      <ThemeProvider theme={isDark ? darkTheme : lightTheme}>
+        <GlobalStyle />
+        <Outlet />
+      </ThemeProvider>
     </>
   );
 }
