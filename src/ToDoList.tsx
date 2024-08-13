@@ -31,17 +31,52 @@ import { useForm } from "react-hook-form";
 //   );
 // };
 
+interface FormData {
+  [key: string]: string;
+}
+
 const ToDoList = () => {
-  const { register, watch } = useForm();
-  console.log(watch());
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    defaultValues: {
+      email: "@naver.com",
+    },
+  });
+  const onValid = (data: any) => {
+    console.log(data);
+  };
   return (
     <div>
-      <form>
-        <input {...register("id")} />
-        <input {...register("pw1")} />
-        <input {...register("pw2")} />
-        <input {...register("email")} />
-        <input {...register("mobile")} />
+      <form
+        style={{ display: "flex", flexDirection: "column" }}
+        onSubmit={handleSubmit(onValid)}
+      >
+        <input
+          {...register("you need to input id", {
+            required: true,
+            minLength: {
+              value: 5,
+              message: "your id is too short",
+            },
+          })}
+        />
+        <input {...register("pw1", { required: true })} />
+        <input {...register("pw2", { required: true })} />
+        <input
+          {...register("email", {
+            required: "you need to input email",
+            pattern: {
+              value: /^[A-Za-z0-9._%+-]+@naver\.com$/,
+              message: "Only naver.com emails allowed",
+            },
+          })}
+          placeholder="Email"
+        />
+        <span>{errors?.email?.message}</span>
+        <input {...register("mobile", { required: true })} />
         <button>Add</button>
       </form>
     </div>
