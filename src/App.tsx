@@ -1,5 +1,13 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { useAtom } from "jotai";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
 import styled from "styled-components";
+import { toDosAtom } from "./atoms";
+import DraggableCard from "./components/DraggableCard";
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,10 +38,18 @@ const Card = styled.div`
   margin-bottom: 5px;
 `;
 
-const toDos = ["a", "b", "c", "d", "e", "f"];
-
 export default function App() {
-  const onDragEnd = () => {};
+  const [toDos, setToDos] = useAtom(toDosAtom);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (destination?.index === undefined) return;
+
+    setToDos((oldToDos) => {
+      const copyToDos = [...oldToDos];
+      copyToDos.splice(source.index, 1);
+      copyToDos.splice(destination?.index, 0, draggableId);
+      return copyToDos;
+    });
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
@@ -42,17 +58,7 @@ export default function App() {
             {(provided) => (
               <Board ref={provided.innerRef} {...provided.droppableProps}>
                 {toDos.map((toDo, index) => (
-                  <Draggable draggableId={toDo} index={index}>
-                    {(provided) => (
-                      <Card
-                        ref={provided.innerRef}
-                        {...provided.dragHandleProps}
-                        {...provided.draggableProps}
-                      >
-                        {toDo}
-                      </Card>
-                    )}
-                  </Draggable>
+                  <DraggableCard key={toDo} index={index} toDo={toDo} />
                 ))}
                 {provided.placeholder}
               </Board>
