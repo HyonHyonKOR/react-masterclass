@@ -5,8 +5,8 @@ import "styled-components";
 declare module "styled-componets" {
   //export 정의한 객체를 다른 라이브러리에도 사용할 수 있도록 밖으로 내는 것을 허가한다
   export interface DefaultTheme {
-    textColor: string;
     bgColor: string;
-    accentColor: string;
+    boardColor: string;
+    cardColor: string;
   }
 }
