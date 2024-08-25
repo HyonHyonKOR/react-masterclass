@@ -1,3 +1,11 @@
 import { atom } from "jotai";
 
-export const toDosAtom = atom(["a", "b", "c", "d", "e", "f"]);
+interface IToDoState {
+  [key: string]: string[];
+}
+
+export const toDosAtom = atom<IToDoState>({
+  to_do: ["a", "b"],
+  doing: ["c", "d", "e"],
+  done: ["f"],
+});
