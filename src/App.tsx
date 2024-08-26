@@ -25,31 +25,28 @@ export default function App() {
   const [toDos, setToDos] = useAtom(toDosAtom);
   const onDragEnd = (info: DropResult) => {
     const { destination, draggableId, source } = info;
+
     if (destination?.index === undefined) return;
-    if (destination?.droppableId === source.droppableId) {
-      //same board movement.
-      setToDos((allBoards) => {
-        const boardCopy = [...allBoards[source.droppableId]];
-        boardCopy.splice(source.index, 1);
-        boardCopy.splice(destination?.index, 0, draggableId);
-        return { ...allBoards, [source.droppableId]: boardCopy };
-      });
-    }
-    if (destination?.droppableId !== source.droppableId) {
-      //cross board movement
-      setToDos((allBoards) => {
-        const sourceBoard = [...allBoards[source.droppableId]];
-        const targetBoard = [...allBoards[destination.droppableId]];
-        sourceBoard.splice(source.index, 1);
-        targetBoard.splice(destination?.index, 0, draggableId);
+
+    setToDos((allBoards) => {
+      const sourceBoard = [...allBoards[source.droppableId]];
+      const targetBoard = [...allBoards[destination.droppableId]];
+      sourceBoard.splice(source.index, 1);
+      targetBoard.splice(destination?.index, 0, draggableId);
+
+      if (destination?.droppableId === source.droppableId) {
+        sourceBoard.splice(destination?.index, 0, draggableId);
+        return { ...allBoards, [source.droppableId]: sourceBoard };
+      } else {
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,
           [destination.droppableId]: targetBoard,
         };
-      });
-    }
+      }
+    });
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
