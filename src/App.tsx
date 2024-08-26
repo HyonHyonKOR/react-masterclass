@@ -24,20 +24,21 @@ const Boards = styled.div`
 export default function App() {
   const [toDos, setToDos] = useAtom(toDosAtom);
   const onDragEnd = (info: DropResult) => {
-    const { destination, draggableId, source } = info;
+    const { destination, source } = info;
 
     if (destination?.index === undefined) return;
 
     setToDos((allBoards) => {
       const sourceBoard = [...allBoards[source.droppableId]];
       const targetBoard = [...allBoards[destination.droppableId]];
+      const taskObj = sourceBoard[source.index];
       sourceBoard.splice(source.index, 1);
-      targetBoard.splice(destination?.index, 0, draggableId);
 
       if (destination?.droppableId === source.droppableId) {
-        sourceBoard.splice(destination?.index, 0, draggableId);
+        sourceBoard.splice(destination?.index, 0, taskObj);
         return { ...allBoards, [source.droppableId]: sourceBoard };
       } else {
+        targetBoard.splice(destination?.index, 0, taskObj);
         return {
           ...allBoards,
           [source.droppableId]: sourceBoard,
