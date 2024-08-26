@@ -8,5 +8,6 @@ declare module "styled-componets" {
     bgColor: string;
     boardColor: string;
     cardColor: string;
+    fontColor: string;
   }
 }

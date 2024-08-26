@@ -6,19 +6,20 @@ import Board from "./components/Board";
 
 const Wrapper = styled.div`
   display: flex;
-  width: 100vh;
-  height: 100vh;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
+  min-height: 100vh;
+  background: ${(props) => props.theme.bgColor};
 `;
 
 const Boards = styled.div`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
+  gap: 2rem;
   width: 100%;
-  gap: 10px;
 `;
 
 export default function App() {

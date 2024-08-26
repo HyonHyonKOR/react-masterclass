@@ -13,13 +13,18 @@ interface ICardProps {
 }
 
 const Card = styled.div<ICardProps>`
-  border-radius: 5px;
-  padding: 10px;
+  word-break: break-all;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  color: ${(props) => (props.isDragging ? "white" : props.theme.fontColor)};
   background-color: ${(props) =>
-    props.isDragging ? "#74b9ff" : props.theme.cardColor};
-  margin-bottom: 5px;
+    props.isDragging ? props.theme.fontColor : props.theme.cardColor};
   box-shadow: ${(props) =>
-    props.isDragging ? "0px 2px 5px rgba(0,0,0,0.05)" : "none"};
+    props.isDragging
+      ? "0px 8px 8px rgba(0,0,0,0.8)"
+      : "0px 2px 5px rgba(0,0,0,0.5)"};
+  font-weight: 600;
 `;
 
 function DraggableCard({ toDoId, toDoText, index }: IDraggableCardProps) {
