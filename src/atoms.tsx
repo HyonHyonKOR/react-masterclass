@@ -3,6 +3,7 @@ import { atom } from "jotai";
 export interface ITodo {
   id: number;
   text: string;
+  date: string;
 }
 
 interface IToDoState {

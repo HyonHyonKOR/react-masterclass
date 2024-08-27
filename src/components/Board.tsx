@@ -4,7 +4,8 @@ import DraggableCard from "./DraggableCard";
 import styled from "styled-components";
 import { ITodo, toDosAtom } from "../atoms";
 import { useSetAtom } from "jotai";
-import { IoIosAddCircle } from "react-icons/io";
+import { IoIosAdd } from "react-icons/io";
+import { Months } from "../types/Months";
 
 interface IBoardProps {
   toDos: ITodo[];
@@ -23,27 +24,25 @@ interface IForm {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 18rem;
-  min-height: 35rem;
-  padding: 0.75rem 0 0 0;
+  width: 25rem;
+  padding: 0.75rem;
   background: ${(props) => props.theme.boardColor};
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 1.25rem;
-  box-shadow: 0 8px 8px 0 rgba(80, 81, 87, 0.37);
+  border-radius: 0.25rem;
+  box-shadow: 0 2px 2px 0 rgba(80, 81, 87, 0.37);
 `;
 
 const Title = styled.h2`
-  padding: 2rem 1rem 1rem 1rem;
+  padding: 0.75rem;
   color: ${(props) => props.theme.fontColor};
   font-size: 1.25rem;
   font-weight: 800;
 `;
 
 const Area = styled.div<IAreaProps>`
-  padding: 1rem;
+  padding: 1rem 0;
   background-color: ${(props) =>
     props.isDraggingOver
-      ? props.theme.fontColor
+      ? "rgba(255,255,255,0.9)"
       : props.isDraggingFromThis
       ? "transparent"
       : "transparent"};
@@ -52,19 +51,22 @@ const Area = styled.div<IAreaProps>`
 `;
 
 const Form = styled.form`
-  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   input {
-    width: 100%;
-    padding: 1.25rem;
+    width: 90%;
+    padding: 1rem 0.5rem;
+    background-color: ${(props) => props.theme.boardColor};
+    color: ${(props) => props.theme.fontColor};
     border: none;
     border-radius: 1rem;
     outline: none;
+    font-size: 1rem;
   }
   button {
-    position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
+    padding: 0;
     background-color: transparent;
     cursor: pointer;
     border: none;
@@ -75,7 +77,12 @@ export default function Board({ toDos, boardId }: IBoardProps) {
   const setToDos = useSetAtom(toDosAtom);
   const { register, setValue, handleSubmit } = useForm<IForm>();
   const onValid = ({ toDo }: IForm) => {
-    const newToDo = { id: Date.now(), text: toDo };
+    const now = new Date();
+    const newToDo = {
+      id: Date.now(),
+      text: toDo,
+      date: `${Months[now.getMonth()]} ${now.getDate()}`,
+    };
     setToDos((allBoards) => {
       return { ...allBoards, [boardId]: [newToDo, ...allBoards[boardId]] };
     });
@@ -98,6 +105,7 @@ export default function Board({ toDos, boardId }: IBoardProps) {
                 index={index}
                 toDoId={toDo.id}
                 toDoText={toDo.text}
+                toDoDate={toDo.date}
               />
             ))}
             {provided.placeholder}
@@ -105,15 +113,17 @@ export default function Board({ toDos, boardId }: IBoardProps) {
         )}
       </Droppable>
       <Form onSubmit={handleSubmit(onValid)}>
+        <button type="submit">
+          <IoIosAdd size={25} color="#4D4D4D" />
+        </button>
         <input
           {...register("toDo", {
             required: true,
           })}
           type="text"
+          placeholder="Add a Task"
+          autoComplete="false"
         />
-        <button type="submit">
-          <IoIosAddCircle size={35} color="#6D28D9" />
-        </button>
       </Form>
     </Wrapper>
   );

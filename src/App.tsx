@@ -18,7 +18,7 @@ const Boards = styled.div`
   flex-wrap: wrap;
   justify-content: center;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 1rem;
   width: 100%;
 `;
 
