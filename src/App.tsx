@@ -3,10 +3,14 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { toDosAtom } from "./atoms";
 import Board from "./components/Board";
+import { useEffect } from "react";
+import { ThemeProvider } from "styled-components";
+import { normalTheme, darkTheme } from "./theme";
 
 const Wrapper = styled.div`
   display: flex;
   margin: 0 auto;
+  padding: 1rem;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -24,6 +28,12 @@ const Boards = styled.div`
 
 export default function App() {
   const [toDos, setToDos] = useAtom(toDosAtom);
+
+  useEffect(() => {
+    const toDosInDB = localStorage.getItem("toDos");
+    if (toDosInDB) setToDos(JSON.parse(toDosInDB));
+  }, [setToDos]);
+
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;
 
@@ -37,27 +47,33 @@ export default function App() {
 
       if (destination?.droppableId === source.droppableId) {
         sourceBoard.splice(destination?.index, 0, taskObj);
-        return { ...allBoards, [source.droppableId]: sourceBoard };
+        const newBoard = { ...allBoards, [source.droppableId]: sourceBoard };
+        localStorage.setItem("toDos", JSON.stringify(newBoard));
+        return newBoard;
       } else {
         targetBoard.splice(destination?.index, 0, taskObj);
-        return {
+        const newBoard = {
           ...allBoards,
           [source.droppableId]: sourceBoard,
           [destination.droppableId]: targetBoard,
         };
+        localStorage.setItem("toDos", JSON.stringify(newBoard));
+        return newBoard;
       }
     });
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Wrapper>
-        <Boards>
-          {Object.keys(toDos).map((boardId) => (
-            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
-          ))}
-        </Boards>
-      </Wrapper>
-    </DragDropContext>
+    <ThemeProvider theme={normalTheme}>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Wrapper>
+          <Boards>
+            {Object.keys(toDos).map((boardId) => (
+              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+            ))}
+          </Boards>
+        </Wrapper>
+      </DragDropContext>
+    </ThemeProvider>
   );
 }

@@ -1,36 +1,23 @@
-import { memo, useState } from "react";
+import { memo } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import avatar from "../images/avatar.jpg";
 import { BsPencil } from "react-icons/bs";
 import { IoCloseOutline, IoTimeOutline } from "react-icons/io5";
+import { useSetAtom } from "jotai";
+import { toDosAtom } from "../atoms";
 
 interface IDraggableCardProps {
   toDoId: number;
   toDoText: string;
   toDoDate: string;
   index: number;
+  boardId: string;
 }
 
 interface ICardProps {
   isDragging: boolean;
 }
-
-const Card = styled.div<ICardProps>`
-  position: relative;
-  word-break: break-all;
-  border-radius: 0.5rem;
-  padding: 1.5rem 1rem 1rem 1rem;
-  margin-bottom: 0.5rem;
-  color: ${(props) => (props.isDragging ? "white" : props.theme.fontColor)};
-  background-color: ${(props) =>
-    props.isDragging ? props.theme.fontColor : props.theme.cardColor};
-  box-shadow: ${(props) => "2px 2px 2px rgba(0,0,0,0.2)"};
-  font-weight: 600;
-  font-size: 1.25rem;
-  letter-spacing: -0.1rem;
-  line-height: 1.25rem;
-`;
 
 const Buttons = styled.div`
   display: flex;
@@ -40,13 +27,40 @@ const Buttons = styled.div`
   top: 0.25rem;
   right: 0.75rem;
   cursor: pointer;
+
   button {
     margin: 0 0.25rem;
     padding: 0;
-    background-color: transparent;
     border: none;
+    background-color: transparent;
     outline: none;
     cursor: pointer;
+  }
+`;
+
+const Card = styled.div<ICardProps>`
+  position: relative;
+  margin-bottom: 0.5rem;
+  padding: 1.5rem 1rem 1rem 1rem;
+  border-radius: 0.5rem;
+  box-shadow: ${(props) => "2px 2px 2px rgba(0,0,0,0.2)"};
+  color: ${(props) => (props.isDragging ? "white" : props.theme.fontColor)};
+  background-color: ${(props) =>
+    props.isDragging ? props.theme.fontColor : props.theme.cardColor};
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.1rem;
+  line-height: 1.25rem;
+  word-break: break-all;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+  }
+
+  &:not(:hover) {
+    ${Buttons} {
+      opacity: 0;
+    }
   }
 `;
 
@@ -56,6 +70,7 @@ const Information = styled.div`
   align-items: end;
   height: 1rem;
   margin-top: 0.875rem;
+
   div {
     display: flex;
     align-items: center;
@@ -64,6 +79,7 @@ const Information = styled.div`
     font-weight: 300;
     letter-spacing: normal;
   }
+
   img {
     width: 1.5rem;
     border-radius: 50%;
@@ -75,13 +91,45 @@ function DraggableCard({
   toDoText,
   toDoDate,
   index,
+  boardId,
 }: IDraggableCardProps) {
-  const [isHover, setIsHover] = useState(false);
-  const onMouseEnter = (event: React.MouseEvent) => {
-    setIsHover(true);
+  const setToDos = useSetAtom(toDosAtom);
+
+  const updateCard = () => {
+    const inputText = window.prompt()?.trim();
+
+    if (inputText !== undefined) {
+      if (inputText === "") {
+        alert("Please Fill in the text");
+        return;
+      }
+
+      setToDos((allToDos) => {
+        const targetBoard = [...allToDos[boardId]];
+        const targetIndex = targetBoard.findIndex(
+          (item) => item.id === toDoId
+        )!;
+        const newBoard = [...targetBoard];
+        newBoard.splice(targetIndex, 1, {
+          ...targetBoard[targetIndex],
+          text: inputText,
+        });
+
+        const newToDos = { ...allToDos, [boardId]: newBoard };
+        localStorage.setItem("toDos", JSON.stringify(newToDos));
+        return newToDos;
+      });
+    }
   };
-  const onMouseLeave = (event: React.MouseEvent) => {
-    setIsHover(false);
+
+  const deleteCard = () => {
+    setToDos((allToDos) => {
+      const targetBoard = [...allToDos[boardId]];
+      const newBoard = targetBoard.filter((item) => item.id !== toDoId);
+      const newToDos = { ...allToDos, [boardId]: newBoard };
+      localStorage.setItem("toDos", JSON.stringify(newToDos));
+      return newToDos;
+    });
   };
 
   return (
@@ -92,8 +140,6 @@ function DraggableCard({
           ref={provided.innerRef}
           {...provided.dragHandleProps}
           {...provided.draggableProps}
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
         >
           {toDoText}
           <Information>
@@ -103,16 +149,14 @@ function DraggableCard({
             </div>
             <img src={avatar} alt="avatar" />
           </Information>
-          {isHover ? (
-            <Buttons>
-              <button>
-                <BsPencil size={12} color="#4D4D4D" />
-              </button>
-              <button>
-                <IoCloseOutline size={18} color="#4D4D4D" />
-              </button>
-            </Buttons>
-          ) : null}
+          <Buttons>
+            <button>
+              <BsPencil onClick={updateCard} size={12} color="#4D4D4D" />
+            </button>
+            <button>
+              <IoCloseOutline onClick={deleteCard} size={18} color="#4D4D4D" />
+            </button>
+          </Buttons>
         </Card>
       )}
     </Draggable>

@@ -36,6 +36,7 @@ const Title = styled.h2`
   color: ${(props) => props.theme.fontColor};
   font-size: 1.25rem;
   font-weight: 800;
+  word-break: break-all;
 `;
 
 const Area = styled.div<IAreaProps>`
@@ -75,19 +76,32 @@ const Form = styled.form`
 
 export default function Board({ toDos, boardId }: IBoardProps) {
   const setToDos = useSetAtom(toDosAtom);
+
   const { register, setValue, handleSubmit } = useForm<IForm>();
+
   const onValid = ({ toDo }: IForm) => {
     const now = new Date();
+
     const newToDo = {
       id: Date.now(),
       text: toDo,
       date: `${Months[now.getMonth()]} ${now.getDate()}`,
     };
+
     setToDos((allBoards) => {
+      localStorage.setItem(
+        "toDos",
+        JSON.stringify({
+          ...allBoards,
+          [boardId]: [newToDo, ...allBoards[boardId]],
+        })
+      );
       return { ...allBoards, [boardId]: [newToDo, ...allBoards[boardId]] };
     });
+
     setValue("toDo", "");
   };
+
   return (
     <Wrapper>
       <Title>{boardId}</Title>
@@ -106,6 +120,7 @@ export default function Board({ toDos, boardId }: IBoardProps) {
                 toDoId={toDo.id}
                 toDoText={toDo.text}
                 toDoDate={toDo.date}
+                boardId={boardId}
               />
             ))}
             {provided.placeholder}
