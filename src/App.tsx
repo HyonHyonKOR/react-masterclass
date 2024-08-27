@@ -4,17 +4,15 @@ import styled from "styled-components";
 import { toDosAtom } from "./atoms";
 import Board from "./components/Board";
 import { useEffect } from "react";
-import { ThemeProvider } from "styled-components";
-import { normalTheme, darkTheme } from "./theme";
+import Header from "./components/Header";
 
 const Wrapper = styled.div`
   display: flex;
-  margin: 0 auto;
-  padding: 1rem;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: ${(props) => props.theme.bgColor};
+  margin: 0 auto;
+  padding: 1rem;
+  min-height: 90vh;
 `;
 
 const Boards = styled.div`
@@ -64,16 +62,15 @@ export default function App() {
   };
 
   return (
-    <ThemeProvider theme={normalTheme}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Wrapper>
-          <Boards>
-            {Object.keys(toDos).map((boardId) => (
-              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
-            ))}
-          </Boards>
-        </Wrapper>
-      </DragDropContext>
-    </ThemeProvider>
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Header />
+      <Wrapper>
+        <Boards>
+          {Object.keys(toDos).map((boardId) => (
+            <Board boardId={boardId} key={boardId} toDos={toDos[boardId]} />
+          ))}
+        </Boards>
+      </Wrapper>
+    </DragDropContext>
   );
 }

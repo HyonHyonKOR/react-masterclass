@@ -43,6 +43,9 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   line-height: 1;
   overflow-y: scroll;
+  background: ${(props) => props.theme.bgColor};
+  background-size:cover;
+  background-repeat: no-repeat;
 }
 
 
@@ -71,8 +74,8 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <>
+  <ThemeProvider theme={normalTheme}>
     <GlobalStyle />
     <App />
-  </>
+  </ThemeProvider>
 );

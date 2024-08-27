@@ -33,6 +33,7 @@ const Buttons = styled.div`
     padding: 0;
     border: none;
     background-color: transparent;
+    color: ${(props) => props.theme.textColor};
     outline: none;
     cursor: pointer;
   }
