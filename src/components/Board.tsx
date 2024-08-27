@@ -24,26 +24,27 @@ interface IForm {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 25rem;
-  padding: 0.75rem;
+  width: 20rem;
+  padding: 0.5rem;
   background: ${(props) => props.theme.boardColor};
-  border-radius: 0.25rem;
-  box-shadow: 0 2px 2px 0 rgba(80, 81, 87, 0.37);
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+  border: solid 1px ${(props) => props.theme.borderColor};
+  box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.05);
 `;
 
 const Title = styled.h2`
-  padding: 0.75rem;
-  color: ${(props) => props.theme.fontColor};
+  padding: 0.75rem 0.75rem 1.25rem 0.75rem;
+  color: ${(props) => props.theme.fontMainColor};
   font-size: 1.25rem;
-  font-weight: 800;
+  font-weight: 600;
   word-break: break-all;
 `;
 
 const Area = styled.div<IAreaProps>`
-  padding: 1rem 0;
   background-color: ${(props) =>
     props.isDraggingOver
-      ? "rgba(255,255,255,0.9)"
+      ? "rgba(255,255,255,0.6)"
       : props.isDraggingFromThis
       ? "transparent"
       : "transparent"};
@@ -60,7 +61,7 @@ const Form = styled.form`
     width: 90%;
     padding: 1rem 0.5rem;
     background-color: ${(props) => props.theme.boardColor};
-    color: ${(props) => props.theme.fontColor};
+    color: ${(props) => props.theme.fontSubColor};
     border: none;
     border-radius: 1rem;
     outline: none;
@@ -68,6 +69,7 @@ const Form = styled.form`
   }
   button {
     padding: 0;
+    color: ${(props) => props.theme.fontSubColor};
     background-color: transparent;
     cursor: pointer;
     border: none;
@@ -129,7 +131,7 @@ export default function Board({ toDos, boardId }: IBoardProps) {
       </Droppable>
       <Form onSubmit={handleSubmit(onValid)}>
         <button type="submit">
-          <IoIosAdd size={25} color="#4D4D4D" />
+          <IoIosAdd size={25} />
         </button>
         <input
           {...register("toDo", {

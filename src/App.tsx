@@ -9,8 +9,6 @@ import Header from "./components/Header";
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin: 0 auto;
   padding: 1rem;
   min-height: 90vh;
 `;
@@ -30,7 +28,8 @@ export default function App() {
   useEffect(() => {
     const toDosInDB = localStorage.getItem("toDos");
     if (toDosInDB) setToDos(JSON.parse(toDosInDB));
-  }, [setToDos]);
+    return;
+  }, []);
 
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;

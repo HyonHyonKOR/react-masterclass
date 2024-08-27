@@ -1,9 +1,11 @@
-import React from "react";
+import { useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider } from "styled-components";
-import { normalTheme, darkTheme } from "./theme";
+import { lightTheme, darkTheme } from "./theme";
 import App from "./App";
 import { createGlobalStyle } from "styled-components";
+import { useAtom } from "jotai";
+import { themeAtom } from "./atoms";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -40,14 +42,13 @@ footer, header, hgroup, main, menu, nav, section {
 }
 
 body {
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: "M PLUS 1p";
   line-height: 1;
   overflow-y: scroll;
   background: ${(props) => props.theme.bgColor};
   background-size:cover;
   background-repeat: no-repeat;
 }
-
 
 a{
   text-decoration: none;
@@ -70,12 +71,31 @@ table {
 }
 `;
 
+const Root = () => {
+  const [isLightMode, setIsLightMode] = useAtom(themeAtom);
+  const modeInDB = localStorage.getItem("isLightMode");
+
+  useEffect(() => {
+    if (modeInDB === null) {
+      localStorage.setItem("isLightMode", JSON.stringify(true));
+      setIsLightMode({ ...isLightMode, isLight: true });
+    } else {
+      setIsLightMode(JSON.parse(modeInDB));
+    }
+    return;
+  }, []);
+
+  const appliedTheme = isLightMode.isLight ? lightTheme : darkTheme;
+
+  return (
+    <ThemeProvider theme={appliedTheme}>
+      <GlobalStyle />
+      <App />
+    </ThemeProvider>
+  );
+};
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
-root.render(
-  <ThemeProvider theme={normalTheme}>
-    <GlobalStyle />
-    <App />
-  </ThemeProvider>
-);
+root.render(<Root />);

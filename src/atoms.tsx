@@ -15,3 +15,11 @@ export const toDosAtom = atom<IToDoState>({
   Doing: [],
   Done: [],
 });
+
+interface IthemeState {
+  isLight: boolean;
+}
+
+export const themeAtom = atom<IthemeState>({
+  isLight: true,
+});

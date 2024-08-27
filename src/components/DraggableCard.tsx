@@ -25,15 +25,15 @@ const Buttons = styled.div`
   align-items: center;
   position: absolute;
   top: 0.25rem;
-  right: 0.75rem;
+  right: 0.25rem;
   cursor: pointer;
 
   button {
-    margin: 0 0.25rem;
+    margin-right: 0.25rem;
     padding: 0;
     border: none;
     background-color: transparent;
-    color: ${(props) => props.theme.textColor};
+    color: ${(props) => props.theme.fontSubColor};
     outline: none;
     cursor: pointer;
   }
@@ -44,13 +44,13 @@ const Card = styled.div<ICardProps>`
   margin-bottom: 0.5rem;
   padding: 1.5rem 1rem 1rem 1rem;
   border-radius: 0.5rem;
-  box-shadow: ${(props) => "2px 2px 2px rgba(0,0,0,0.2)"};
-  color: ${(props) => (props.isDragging ? "white" : props.theme.fontColor)};
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+  color: ${(props) =>
+    props.isDragging ? "rgba(255, 255, 255, 0.8)" : props.theme.fontMainColor};
   background-color: ${(props) =>
-    props.isDragging ? props.theme.fontColor : props.theme.cardColor};
-  font-size: 1.25rem;
+    props.isDragging ? props.theme.fontSubColor : props.theme.cardColor};
+  font-size: 1.125rem;
   font-weight: 600;
-  letter-spacing: -0.1rem;
   line-height: 1.25rem;
   word-break: break-all;
 
@@ -65,7 +65,7 @@ const Card = styled.div<ICardProps>`
   }
 `;
 
-const Information = styled.div`
+const Information = styled.div<ICardProps>`
   display: flex;
   justify-content: space-between;
   align-items: end;
@@ -74,11 +74,12 @@ const Information = styled.div`
 
   div {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 0.25rem;
-    font-size: 0.875rem;
-    font-weight: 300;
-    letter-spacing: normal;
+    color: ${(props) =>
+      props.isDragging ? "rgba(255, 255, 255, 0.8)" : props.theme.fontSubColor};
+    font-size: 0.75rem;
+    font-weight: 400;
   }
 
   img {
@@ -143,9 +144,9 @@ function DraggableCard({
           {...provided.draggableProps}
         >
           {toDoText}
-          <Information>
+          <Information isDragging={snapshot.isDragging}>
             <div>
-              <IoTimeOutline size={18} />
+              <IoTimeOutline size={17} />
               <span>{toDoDate}</span>
             </div>
             <img src={avatar} alt="avatar" />
