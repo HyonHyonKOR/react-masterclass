@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { DragDropContext, DropResult } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { toDosAtom } from "./atoms";
 import Board from "./components/Board";

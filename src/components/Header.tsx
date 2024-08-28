@@ -16,16 +16,20 @@ export default function Header() {
   };
 
   const createBoard = () => {
-    const inputBoardName = window.prompt("Add A Board")?.trim();
+    const newBoardId = window.prompt("Add A Board")?.trim();
 
-    if (inputBoardName !== undefined) {
-      if (inputBoardName === "") {
+    if (newBoardId !== undefined) {
+      if (newBoardId === "") {
         alert("Please Fill in the text");
         return;
       }
-
       setToDos((allToDos) => {
-        const newToDos = { ...allToDos, [inputBoardName]: [] };
+        if (Object.keys(allToDos).includes(newBoardId)) {
+          alert("You can't make same Board");
+          return allToDos;
+        }
+
+        const newToDos = { ...allToDos, [newBoardId]: [] };
         localStorage.setItem("toDos", JSON.stringify(newToDos));
         return newToDos;
       });

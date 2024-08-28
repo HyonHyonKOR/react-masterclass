@@ -54,11 +54,22 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h2`
-  padding: 0rem 0.75rem 1.25rem 0.75rem;
+  padding: 0.75rem;
   color: ${(props) => props.theme.fontMainColor};
+  font-family: "M PLUS 1p";
   font-size: 1.25rem;
   font-weight: 600;
   word-break: break-all;
+  border: none;
+  outline: none;
+
+  &:hover {
+    background-color: ${(props) => props.theme.hoverBgColor};
+  }
+`;
+
+const Devider = styled.div`
+  padding: 0.5rem 0.75rem;
 `;
 
 const Area = styled.div<IAreaProps>`
@@ -98,7 +109,6 @@ const Form = styled.form`
 
 export default function Board({ toDos, boardId }: IBoardProps) {
   const setToDos = useSetAtom(toDosAtom);
-
   const { register, setValue, handleSubmit } = useForm<IForm>();
 
   const createCard = ({ toDo }: IForm) => {
@@ -124,12 +134,35 @@ export default function Board({ toDos, boardId }: IBoardProps) {
     setValue("toDo", "");
   };
 
+  const updateBoard = () => {
+    const newBoardId = window.prompt("Insert New Title")?.trim();
+
+    if (newBoardId !== undefined) {
+      if (newBoardId === "") {
+        alert("please write a title");
+        return;
+      }
+
+      setToDos((allToDos) => {
+        if (Object.keys(allToDos).includes(newBoardId)) {
+          alert("You can't make same Board");
+          return allToDos;
+        }
+
+        const copyToDos = { ...allToDos };
+        const { [boardId]: value, ...restToDos } = copyToDos;
+        const newToDos = { [newBoardId]: value, ...restToDos };
+        return newToDos;
+      });
+    }
+  };
+
   const deleteBoard = () => {
     setToDos((allTodos) => {
       const newToDos = { ...allTodos };
-      delete newToDos[boardId];
-      localStorage.setItem("toDos", JSON.stringify(newToDos));
-      return newToDos;
+      const { [boardId]: _, ...updateTodos } = newToDos;
+      localStorage.setItem("toDos", JSON.stringify(updateTodos));
+      return updateTodos;
     });
   };
 
@@ -140,7 +173,8 @@ export default function Board({ toDos, boardId }: IBoardProps) {
           <IoCloseOutline size={18} />
         </button>
       </BoardHeader>
-      <Title>{boardId}</Title>
+      <Title onClick={updateBoard}>{boardId}</Title>
+      <Devider></Devider>
       <Droppable droppableId={boardId}>
         {(provided, info) => (
           <Area
