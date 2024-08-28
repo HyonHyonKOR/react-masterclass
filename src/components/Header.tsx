@@ -1,18 +1,47 @@
 import styled from "styled-components";
 import { MdAddToPhotos, MdLightMode, MdNightlight } from "react-icons/md";
 import { useAtom, useSetAtom } from "jotai";
-import { themeAtom, toDosAtom } from "../atoms";
+import { isLight, toDosAtom } from "../atoms";
+import { useEffect } from "react";
 
 export default function Header() {
+  /*styles*/
+  const Header = styled.header`
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2rem;
+    margin: 0 15rem;
+    height: 20vh;
+
+    @media (max-width: 704px) {
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    button {
+      padding: 0;
+      background-color: transparent;
+      color: ${(props) => props.theme.fontMainColor};
+      cursor: pointer;
+      border: none;
+      MdNightlight,
+      MdLightMode {
+        transition: color 1s ease-in-out;
+      }
+    }
+  `;
+
+  /*function*/
   const setToDos = useSetAtom(toDosAtom);
-  const [mode, setMode] = useAtom(themeAtom);
+  const [isLightMode, setIsLightMode] = useAtom(isLight);
+
+  useEffect(() => {
+    localStorage.setItem("isLightMode", JSON.stringify(isLightMode));
+  }, [isLightMode]);
 
   const changeMode = () => {
-    setMode((prev) => {
-      const newMode = { ...prev, isLight: !prev.isLight };
-      localStorage.setItem("isLightMode", JSON.stringify(newMode));
-      return newMode;
-    });
+    setIsLightMode((prev) => !prev);
   };
 
   const createBoard = () => {
@@ -35,28 +64,6 @@ export default function Header() {
       });
     }
   };
-  const Header = styled.header`
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 2rem;
-    margin: 0 15rem;
-    height: 20vh;
-
-    @media (max-width: 704px) {
-      justify-content: center;
-      margin-bottom: 2rem;
-    }
-
-    button {
-      padding: 0;
-      background-color: transparent;
-      color: ${(props) => props.theme.fontMainColor};
-      cursor: pointer;
-      border: none;
-      transition: color 0.2s;
-    }
-  `;
 
   return (
     <Header>
@@ -64,7 +71,7 @@ export default function Header() {
         <MdAddToPhotos onClick={createBoard} size={30} />
       </button>
       <button>
-        {mode.isLight ? (
+        {isLight ? (
           <MdNightlight onClick={changeMode} size={30} />
         ) : (
           <MdLightMode onClick={changeMode} size={30} />

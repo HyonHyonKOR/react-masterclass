@@ -12,8 +12,7 @@ export const darkTheme: DefaultTheme = {
 };
 
 export const lightTheme: DefaultTheme = {
-  bgColor:
-    "linear-gradient(180deg, rgba(250,153,183,1) 0%,rgba(233,216,242,1)50%, rgba(233,233,233,0.8) 100%);",
+  bgColor: "#D3D3D3",
   boardColor: "#E2E4E6",
   cardColor: "rgba( 255, 255, 255, 0.4);",
   fontMainColor: "#111111",

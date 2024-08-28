@@ -16,10 +16,4 @@ export const toDosAtom = atom<IToDoState>({
   Done: [],
 });
 
-interface IthemeState {
-  isLight: boolean;
-}
-
-export const themeAtom = atom<IthemeState>({
-  isLight: true,
-});
+export const isLight = atom(true);

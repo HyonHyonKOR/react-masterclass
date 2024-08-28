@@ -11,6 +11,7 @@ import { Months } from "../types/Months";
 interface IBoardProps {
   toDos: ITodo[];
   boardId: string;
+  index: number;
 }
 
 interface IAreaProps {
@@ -107,7 +108,7 @@ const Form = styled.form`
   }
 `;
 
-export default function Board({ toDos, boardId }: IBoardProps) {
+export default function Board({ toDos, boardId, index }: IBoardProps) {
   const setToDos = useSetAtom(toDosAtom);
   const { register, setValue, handleSubmit } = useForm<IForm>();
 
@@ -144,13 +145,14 @@ export default function Board({ toDos, boardId }: IBoardProps) {
       }
 
       setToDos((allToDos) => {
-        if (Object.keys(allToDos).includes(newBoardId)) {
+        const allBoards = Object.keys(allToDos);
+
+        if (allBoards.includes(newBoardId)) {
           alert("You can't make same Board");
           return allToDos;
         }
 
         const copyToDos = { ...allToDos };
-        console.log(Object.entries(copyToDos));
         const { [boardId]: value, ...restToDos } = copyToDos;
         const newToDos = { ...restToDos, [newBoardId]: value };
         return newToDos;
