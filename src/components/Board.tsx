@@ -150,8 +150,9 @@ export default function Board({ toDos, boardId }: IBoardProps) {
         }
 
         const copyToDos = { ...allToDos };
+        console.log(Object.entries(copyToDos));
         const { [boardId]: value, ...restToDos } = copyToDos;
-        const newToDos = { [newBoardId]: value, ...restToDos };
+        const newToDos = { ...restToDos, [newBoardId]: value };
         return newToDos;
       });
     }
