@@ -12,11 +12,11 @@ export default function Header() {
     align-items: center;
     gap: 2rem;
     margin: 0 15rem;
-    height: 20vh;
+    height: 15vh;
 
-    @media (max-width: 704px) {
+    @media (max-width: 1280px) {
       justify-content: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
     }
 
     button {

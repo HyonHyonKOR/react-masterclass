@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Droppable } from "react-beautiful-dnd";
+import { Draggable, Droppable } from "react-beautiful-dnd";
 import DraggableCard from "./DraggableCard";
 import styled from "styled-components";
 import { ITodo, toDosAtom } from "../atoms";
@@ -39,7 +39,7 @@ const BoardHeader = styled.header`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20rem;
+  min-width: 20rem;
   padding: 0.5rem;
   background: ${(props) => props.theme.boardColor};
   border-top-left-radius: 0.375rem;
@@ -74,14 +74,41 @@ const Devider = styled.div`
 `;
 
 const Area = styled.div<IAreaProps>`
+  overflow-y: hidden;
+  flex-grow: 1;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "rgba(255,255,255,0.6)"
       : props.isDraggingFromThis
       ? "transparent"
       : "transparent"};
-  flex-grow: 1;
-  transition: background-color 0.2s ease-in-out;
+  max-height: 50vh;
+  transition: all 0.3s ease-in-out;
+  scrollbar-gutter: stable;
+
+  &:active,
+  &:hover {
+    overflow-y: auto;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 6px;
+    border-radius: 0.25rem;
+    visibility: hidden;
+  }
+  &::-webkit-scrollbar-track {
+    visibility: hidden;
+  }
+  &:active::-webkit-scrollbar-thumb,
+  &:hover::-webkit-scrollbar-thumb,
+  &:focus::-webkit-scrollbar-thumb {
+    visibility: visible;
+    background: #d99090;
+  }
 `;
 
 const Form = styled.form`
@@ -155,6 +182,7 @@ export default function Board({ toDos, boardId, index }: IBoardProps) {
         const copyToDos = { ...allToDos };
         const { [boardId]: value, ...restToDos } = copyToDos;
         const newToDos = { ...restToDos, [newBoardId]: value };
+        localStorage.setItem("toDos", JSON.stringify(newToDos));
         return newToDos;
       });
     }
@@ -170,49 +198,57 @@ export default function Board({ toDos, boardId, index }: IBoardProps) {
   };
 
   return (
-    <Wrapper>
-      <BoardHeader>
-        <button onClick={deleteBoard}>
-          <IoCloseOutline size={18} />
-        </button>
-      </BoardHeader>
-      <Title onClick={updateBoard}>{boardId}</Title>
-      <Devider></Devider>
-      <Droppable droppableId={boardId}>
-        {(provided, info) => (
-          <Area
-            isDraggingOver={info.isDraggingOver}
-            isDraggingFromThis={Boolean(info.draggingFromThisWith)}
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-            {toDos.map((toDo, index) => (
-              <DraggableCard
-                key={toDo.id}
-                index={index}
-                toDoId={toDo.id}
-                toDoText={toDo.text}
-                toDoDate={toDo.date}
-                boardId={boardId}
-              />
-            ))}
-            {provided.placeholder}
-          </Area>
-        )}
-      </Droppable>
-      <Form onSubmit={handleSubmit(createCard)}>
-        <button type="submit">
-          <IoIosAdd size={25} />
-        </button>
-        <input
-          {...register("toDo", {
-            required: true,
-          })}
-          type="text"
-          placeholder="Add a Task"
-          autoComplete="false"
-        />
-      </Form>
-    </Wrapper>
+    <Draggable
+      draggableId={`board-${boardId}`}
+      key={`board-${boardId}`}
+      index={index}
+    >
+      {(provided, snapshot) => (
+        <Wrapper ref={provided.innerRef} {...provided.draggableProps}>
+          <BoardHeader {...provided.dragHandleProps}>
+            <button onClick={deleteBoard}>
+              <IoCloseOutline size={18} />
+            </button>
+          </BoardHeader>
+          <Title onClick={updateBoard}>{boardId}</Title>
+          <Devider></Devider>
+          <Droppable droppableId={boardId} type="cards">
+            {(provided, info) => (
+              <Area
+                isDraggingOver={info.isDraggingOver}
+                isDraggingFromThis={Boolean(info.draggingFromThisWith)}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {toDos.map((toDo, index) => (
+                  <DraggableCard
+                    key={toDo.id}
+                    index={index}
+                    toDoId={toDo.id}
+                    toDoText={toDo.text}
+                    toDoDate={toDo.date}
+                    boardId={boardId}
+                  />
+                ))}
+                {provided.placeholder}
+              </Area>
+            )}
+          </Droppable>
+          <Form onSubmit={handleSubmit(createCard)}>
+            <button type="submit">
+              <IoIosAdd size={25} />
+            </button>
+            <input
+              {...register("toDo", {
+                required: true,
+              })}
+              type="text"
+              placeholder="Add a Task"
+              autoComplete="false"
+            />
+          </Form>
+        </Wrapper>
+      )}
+    </Draggable>
   );
 }
