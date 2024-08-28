@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { ITodo, toDosAtom } from "../atoms";
 import { useSetAtom } from "jotai";
 import { IoIosAdd } from "react-icons/io";
+import { IoCloseOutline } from "react-icons/io5";
 import { Months } from "../types/Months";
 
 interface IBoardProps {
@@ -21,6 +22,19 @@ interface IForm {
   toDo: string;
 }
 
+const BoardHeader = styled.header`
+  display: flex;
+  justify-content: flex-end;
+  button {
+    cursor: pointer;
+    padding: 0;
+    background-color: transparent;
+    color: ${(props) => props.theme.fontMainColor};
+    border: none;
+    outline: none;
+  }
+`;
+
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -31,10 +45,16 @@ const Wrapper = styled.div`
   border-top-right-radius: 0.375rem;
   border: solid 1px ${(props) => props.theme.borderColor};
   box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.05);
+
+  &:not(:hover) {
+    ${BoardHeader} {
+      opacity: 0;
+    }
+  }
 `;
 
 const Title = styled.h2`
-  padding: 0.75rem 0.75rem 1.25rem 0.75rem;
+  padding: 0rem 0.75rem 1.25rem 0.75rem;
   color: ${(props) => props.theme.fontMainColor};
   font-size: 1.25rem;
   font-weight: 600;
@@ -81,7 +101,7 @@ export default function Board({ toDos, boardId }: IBoardProps) {
 
   const { register, setValue, handleSubmit } = useForm<IForm>();
 
-  const onValid = ({ toDo }: IForm) => {
+  const createCard = ({ toDo }: IForm) => {
     const now = new Date();
 
     const newToDo = {
@@ -104,8 +124,22 @@ export default function Board({ toDos, boardId }: IBoardProps) {
     setValue("toDo", "");
   };
 
+  const deleteBoard = () => {
+    setToDos((allTodos) => {
+      const newToDos = { ...allTodos };
+      delete newToDos[boardId];
+      localStorage.setItem("toDos", JSON.stringify(newToDos));
+      return newToDos;
+    });
+  };
+
   return (
     <Wrapper>
+      <BoardHeader>
+        <button onClick={deleteBoard}>
+          <IoCloseOutline size={18} />
+        </button>
+      </BoardHeader>
       <Title>{boardId}</Title>
       <Droppable droppableId={boardId}>
         {(provided, info) => (
@@ -129,7 +163,7 @@ export default function Board({ toDos, boardId }: IBoardProps) {
           </Area>
         )}
       </Droppable>
-      <Form onSubmit={handleSubmit(onValid)}>
+      <Form onSubmit={handleSubmit(createCard)}>
         <button type="submit">
           <IoIosAdd size={25} />
         </button>

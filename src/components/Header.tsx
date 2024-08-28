@@ -1,9 +1,10 @@
 import styled from "styled-components";
 import { MdAddToPhotos, MdLightMode, MdNightlight } from "react-icons/md";
-import { useAtom } from "jotai";
-import { themeAtom } from "../atoms";
+import { useAtom, useSetAtom } from "jotai";
+import { themeAtom, toDosAtom } from "../atoms";
 
 export default function Header() {
+  const setToDos = useSetAtom(toDosAtom);
   const [mode, setMode] = useAtom(themeAtom);
 
   const changeMode = () => {
@@ -14,6 +15,22 @@ export default function Header() {
     });
   };
 
+  const createBoard = () => {
+    const inputBoardName = window.prompt("Add A Board")?.trim();
+
+    if (inputBoardName !== undefined) {
+      if (inputBoardName === "") {
+        alert("Please Fill in the text");
+        return;
+      }
+
+      setToDos((allToDos) => {
+        const newToDos = { ...allToDos, [inputBoardName]: [] };
+        localStorage.setItem("toDos", JSON.stringify(newToDos));
+        return newToDos;
+      });
+    }
+  };
   const Header = styled.header`
     display: flex;
     justify-content: flex-end;
@@ -40,7 +57,7 @@ export default function Header() {
   return (
     <Header>
       <button>
-        <MdAddToPhotos size={30} />
+        <MdAddToPhotos onClick={createBoard} size={30} />
       </button>
       <button>
         {mode.isLight ? (

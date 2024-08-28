@@ -96,7 +96,7 @@ function DraggableCard({
   const setToDos = useSetAtom(toDosAtom);
 
   const updateCard = () => {
-    const inputText = window.prompt()?.trim();
+    const inputText = window.prompt("Update Your Task ")?.trim();
 
     if (inputText !== undefined) {
       if (inputText === "") {
