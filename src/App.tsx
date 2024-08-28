@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   padding: 1rem;
-  min-height: 90vh;
+  min-height: 80vh;
 `;
 
 const Boards = styled.div`

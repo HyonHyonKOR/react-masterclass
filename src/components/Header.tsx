@@ -5,6 +5,7 @@ import { themeAtom } from "../atoms";
 
 export default function Header() {
   const [mode, setMode] = useAtom(themeAtom);
+
   const changeMode = () => {
     setMode((prev) => {
       const newMode = { ...prev, isLight: !prev.isLight };
@@ -16,10 +17,10 @@ export default function Header() {
   const Header = styled.header`
     display: flex;
     justify-content: flex-end;
-    align-items: flex-end;
+    align-items: center;
     gap: 2rem;
-    margin: 0 10rem;
-    height: 10vh;
+    margin: 0 15rem;
+    height: 20vh;
 
     @media (max-width: 704px) {
       justify-content: center;
