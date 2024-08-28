@@ -33,7 +33,7 @@ const Buttons = styled.div`
     padding: 0;
     border: none;
     background-color: transparent;
-    color: ${(props) => props.theme.fontSubColor};
+    color: ${(props) => props.theme.hoverFontColor};
     outline: none;
     cursor: pointer;
   }
@@ -45,17 +45,16 @@ const Card = styled.div<ICardProps>`
   padding: 1.5rem 1rem 1rem 1rem;
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
-  color: ${(props) =>
-    props.isDragging ? "rgba(255, 255, 255, 0.8)" : props.theme.fontMainColor};
+  color: ${(props) => props.theme.fontMainColor};
   background-color: ${(props) =>
-    props.isDragging ? props.theme.fontSubColor : props.theme.cardColor};
+    props.isDragging ? props.theme.hoverBgColor : props.theme.cardColor};
   font-size: 1.125rem;
   font-weight: 600;
   line-height: 1.25rem;
   word-break: break-all;
 
   &:hover {
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: ${(props) => props.theme.hoverBgColor};
   }
 
   &:not(:hover) {
@@ -76,8 +75,7 @@ const Information = styled.div<ICardProps>`
     display: flex;
     align-items: flex-end;
     gap: 0.25rem;
-    color: ${(props) =>
-      props.isDragging ? "rgba(255, 255, 255, 0.8)" : props.theme.fontSubColor};
+    color: ${(props) => props.theme.fontSubColor};
     font-size: 0.75rem;
     font-weight: 400;
   }
@@ -153,10 +151,10 @@ function DraggableCard({
           </Information>
           <Buttons>
             <button>
-              <BsPencil onClick={updateCard} size={12} color="#4D4D4D" />
+              <BsPencil onClick={updateCard} size={12} />
             </button>
             <button>
-              <IoCloseOutline onClick={deleteCard} size={18} color="#4D4D4D" />
+              <IoCloseOutline onClick={deleteCard} size={18} />
             </button>
           </Buttons>
         </Card>
