@@ -3,7 +3,7 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { toDosAtom } from "./atoms";
 import Board from "./components/Board";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Header from "./components/Header";
 
 const Wrapper = styled.div`
@@ -24,12 +24,14 @@ const Boards = styled.div`
 
 export default function App() {
   const [toDos, setToDos] = useAtom(toDosAtom);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const toDosInDB = localStorage.getItem("toDos");
     if (toDosInDB) setToDos(JSON.parse(toDosInDB));
+    setIsLoading((prev) => !prev);
     return;
-  }, []);
+  }, [setToDos]);
 
   const onDragEnd = (info: DropResult) => {
     const { destination, source } = info;
@@ -59,6 +61,10 @@ export default function App() {
       }
     });
   };
+
+  if (!isLoading) {
+    return <div></div>;
+  }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>

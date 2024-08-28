@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider } from "styled-components";
 import { lightTheme, darkTheme } from "./theme";
@@ -72,6 +72,7 @@ table {
 `;
 
 const Root = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [isLightMode, setIsLightMode] = useAtom(themeAtom);
   const modeInDB = localStorage.getItem("isLightMode");
 
@@ -82,10 +83,16 @@ const Root = () => {
     } else {
       setIsLightMode(JSON.parse(modeInDB));
     }
+
+    setIsLoading((prev) => !prev);
     return;
-  }, []);
+  }, [setIsLightMode]);
 
   const appliedTheme = isLightMode.isLight ? lightTheme : darkTheme;
+
+  if (!isLoading) {
+    return <div></div>;
+  }
 
   return (
     <ThemeProvider theme={appliedTheme}>
