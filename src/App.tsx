@@ -69,17 +69,12 @@ table {
 `;
 
 const Wrapper = styled.div`
-  overflow-x: hidden;
+  overflow-x: auto;
   display: flex;
   justify-content: center;
   padding: 1rem;
   min-height: 85vh;
   max-height: 85vh;
-
-  &:active,
-  &:hover {
-    overflow-x: auto;
-  }
 
   &::-webkit-scrollbar {
     width: 0.25rem;
