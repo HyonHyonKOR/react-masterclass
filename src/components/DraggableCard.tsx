@@ -42,6 +42,7 @@ const Buttons = styled.div`
 const Card = styled.div<ICardProps>`
   position: relative;
   padding: 1.25rem 0.75rem 0.75rem 0.75rem;
+  max-width: 17rem;
   margin-bottom: 0.25rem;
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);

@@ -41,6 +41,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   min-width: 18rem;
+  max-width: 18rem;
   padding: 0.5rem;
   background: ${(props) => props.theme.boardColor};
   border-top-left-radius: 0.375rem;
