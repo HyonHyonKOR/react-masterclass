@@ -29,13 +29,16 @@ const Buttons = styled.div`
   cursor: pointer;
 
   button {
-    margin-right: 0.25rem;
-    padding: 0;
+    padding: 0rem;
     border: none;
     background-color: transparent;
     color: ${(props) => props.theme.hoverFontColor};
     outline: none;
     cursor: pointer;
+  }
+
+  :first-child {
+    margin-right: 0.5rem;
   }
 `;
 

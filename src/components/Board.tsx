@@ -26,6 +26,7 @@ interface IForm {
 
 const BoardHeader = styled.header`
   display: flex;
+  padding: 0.5rem;
   justify-content: flex-end;
   button {
     cursor: pointer;
@@ -60,7 +61,7 @@ const Title = styled.h2`
   padding: 0.75rem;
   color: ${(props) => props.theme.fontMainColor};
   font-family: "M PLUS 1p";
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   word-break: break-all;
   border: none;
@@ -76,7 +77,7 @@ const Devider = styled.div`
 `;
 
 const Area = styled.div<IAreaProps>`
-  overflow: hidden;
+  overflow: auto;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "rgba(255,255,255,0.6)"
