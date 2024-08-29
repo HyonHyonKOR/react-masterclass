@@ -7,6 +7,7 @@ import { useSetAtom } from "jotai";
 import { IoIosAdd } from "react-icons/io";
 import { IoCloseOutline } from "react-icons/io5";
 import { Months } from "../types/Months";
+import { memo } from "react";
 
 interface IBoardProps {
   toDos: ITodo[];
@@ -39,7 +40,7 @@ const BoardHeader = styled.header`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 18rem;
+  min-width: 18rem;
   padding: 0.5rem;
   background: ${(props) => props.theme.boardColor};
   border-top-left-radius: 0.375rem;
@@ -74,7 +75,7 @@ const Devider = styled.div`
 `;
 
 const Area = styled.div<IAreaProps>`
-  overflow-y: hidden;
+  overflow: hidden;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "rgba(255,255,255,0.6)"
@@ -89,7 +90,7 @@ const Area = styled.div<IAreaProps>`
 
   &:active,
   &:hover {
-    overflow-y: auto;
+    overflow: auto;
   }
 
   &::-webkit-scrollbar {
@@ -97,7 +98,7 @@ const Area = styled.div<IAreaProps>`
   }
 
   &::-webkit-scrollbar-thumb {
-    height: 6px;
+    height: 4px;
     border-radius: 0.25rem;
     visibility: hidden;
   }
@@ -140,7 +141,7 @@ const Form = styled.form`
   }
 `;
 
-export default function Board({ toDos, boardId, index }: IBoardProps) {
+function Board({ toDos, boardId, index }: IBoardProps) {
   const setToDos = useSetAtom(toDosAtom);
   const { register, setValue, handleSubmit } = useForm<IForm>();
 
@@ -258,3 +259,5 @@ export default function Board({ toDos, boardId, index }: IBoardProps) {
     </Draggable>
   );
 }
+
+export default memo(Board);

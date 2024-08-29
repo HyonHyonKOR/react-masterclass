@@ -12,7 +12,7 @@ export default function Header() {
     align-items: center;
     gap: 2rem;
     margin: 0 15rem;
-    height: 10vh;
+    height: 15vh;
 
     @media (max-width: 1280px) {
       justify-content: center;

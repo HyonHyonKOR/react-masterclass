@@ -6,7 +6,6 @@ import Board from "./components/Board";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import { lightTheme, darkTheme } from "./theme";
-import Footer from "./components/Footer";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -70,10 +69,36 @@ table {
 `;
 
 const Wrapper = styled.div`
+  overflow-x: hidden;
   display: flex;
   justify-content: center;
   padding: 1rem;
-  max-height: 70vh;
+  min-height: 85vh;
+  max-height: 85vh;
+
+  &:active,
+  &:hover {
+    overflow-x: auto;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    height: 0.125rem;
+    border-radius: 5%;
+    visibility: hidden;
+  }
+  &::-webkit-scrollbar-track {
+    visibility: hidden;
+  }
+  &:active::-webkit-scrollbar-thumb,
+  &:hover::-webkit-scrollbar-thumb,
+  &:focus::-webkit-scrollbar-thumb {
+    visibility: visible;
+    background: #d99090;
+  }
 `;
 
 const Boards = styled.div`
@@ -121,9 +146,10 @@ export default function App() {
         return { ...boards };
       });
       return;
-    }
-
-    if (destination?.droppableId === source.droppableId) {
+    } else if (
+      destination.droppableId !== "trashbin" &&
+      destination?.droppableId === source.droppableId
+    ) {
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
         const taskObj = sourceBoard[source.index];
@@ -134,9 +160,10 @@ export default function App() {
         return newBoard;
       });
       return;
-    }
-
-    if (destination?.droppableId !== source.droppableId) {
+    } else if (
+      destination.droppableId !== "trashbin" &&
+      destination?.droppableId !== source.droppableId
+    ) {
       setToDos((allBoards) => {
         const sourceBoard = [...allBoards[source.droppableId]];
         const targetBoard = [...allBoards[destination.droppableId]];
@@ -179,7 +206,6 @@ export default function App() {
             )}
           </Droppable>
         </Wrapper>
-        <Footer />
       </DragDropContext>
     </ThemeProvider>
   );
