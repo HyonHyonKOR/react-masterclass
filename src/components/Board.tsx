@@ -39,7 +39,7 @@ const BoardHeader = styled.header`
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  min-width: 20rem;
+  width: 18rem;
   padding: 0.5rem;
   background: ${(props) => props.theme.boardColor};
   border-top-left-radius: 0.375rem;
@@ -58,7 +58,7 @@ const Title = styled.h2`
   padding: 0.75rem;
   color: ${(props) => props.theme.fontMainColor};
   font-family: "M PLUS 1p";
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
   word-break: break-all;
   border: none;
@@ -70,18 +70,19 @@ const Title = styled.h2`
 `;
 
 const Devider = styled.div`
-  padding: 0.5rem 0.75rem;
+  padding: 0.25rem 0.75rem;
 `;
 
 const Area = styled.div<IAreaProps>`
   overflow-y: hidden;
-  flex-grow: 1;
   background-color: ${(props) =>
     props.isDraggingOver
       ? "rgba(255,255,255,0.6)"
       : props.isDraggingFromThis
       ? "transparent"
       : "transparent"};
+  flex-grow: 1;
+  min-height: 0.1rem;
   max-height: 50vh;
   transition: all 0.3s ease-in-out;
   scrollbar-gutter: stable;
@@ -118,13 +119,13 @@ const Form = styled.form`
   width: 100%;
   input {
     width: 90%;
-    padding: 1rem 0.5rem;
+    padding: 0.875rem 0.5rem;
     background-color: ${(props) => props.theme.boardColor};
     color: ${(props) => props.theme.fontSubColor};
     border: none;
     border-radius: 1rem;
     outline: none;
-    font-size: 1rem;
+    font-size: 0.875rem;
   }
   button {
     padding: 0;
@@ -132,6 +133,10 @@ const Form = styled.form`
     background-color: transparent;
     cursor: pointer;
     border: none;
+
+    IoIosAdd {
+      margin-top: 0.25rem;
+    }
   }
 `;
 
@@ -212,7 +217,7 @@ export default function Board({ toDos, boardId, index }: IBoardProps) {
           </BoardHeader>
           <Title onClick={updateBoard}>{boardId}</Title>
           <Devider></Devider>
-          <Droppable droppableId={boardId} type="cards">
+          <Droppable droppableId={boardId}>
             {(provided, info) => (
               <Area
                 isDraggingOver={info.isDraggingOver}
@@ -234,9 +239,10 @@ export default function Board({ toDos, boardId, index }: IBoardProps) {
               </Area>
             )}
           </Droppable>
+          <Devider></Devider>
           <Form onSubmit={handleSubmit(createCard)}>
             <button type="submit">
-              <IoIosAdd size={25} />
+              <IoIosAdd size={20} />
             </button>
             <input
               {...register("toDo", {

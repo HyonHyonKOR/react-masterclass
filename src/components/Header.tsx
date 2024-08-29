@@ -12,11 +12,11 @@ export default function Header() {
     align-items: center;
     gap: 2rem;
     margin: 0 15rem;
-    height: 15vh;
+    height: 10vh;
 
     @media (max-width: 1280px) {
       justify-content: center;
-      margin-bottom: 1rem;
+      margin: 0.5rem 0 1rem 0;
     }
 
     button {
@@ -25,10 +25,6 @@ export default function Header() {
       color: ${(props) => props.theme.fontMainColor};
       cursor: pointer;
       border: none;
-      MdNightlight,
-      MdLightMode {
-        transition: color 1s ease-in-out;
-      }
     }
   `;
 
@@ -68,13 +64,13 @@ export default function Header() {
   return (
     <Header>
       <button>
-        <MdAddToPhotos onClick={createBoard} size={30} />
+        <MdAddToPhotos onClick={createBoard} size={28} />
       </button>
       <button>
-        {isLight ? (
-          <MdNightlight onClick={changeMode} size={30} />
+        {isLightMode ? (
+          <MdNightlight onClick={changeMode} size={28} />
         ) : (
-          <MdLightMode onClick={changeMode} size={30} />
+          <MdLightMode onClick={changeMode} size={28} />
         )}
       </button>
     </Header>

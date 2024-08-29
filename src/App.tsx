@@ -6,6 +6,7 @@ import Board from "./components/Board";
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import { lightTheme, darkTheme } from "./theme";
+import Footer from "./components/Footer";
 
 const GlobalStyle = createGlobalStyle`
   html, body, div, span, applet, object, iframe,
@@ -70,10 +71,9 @@ table {
 
 const Wrapper = styled.div`
   display: flex;
-  overflow-x: auto;
   justify-content: center;
   padding: 1rem;
-  min-height: 85vh;
+  max-height: 70vh;
 `;
 
 const Boards = styled.div`
@@ -179,6 +179,7 @@ export default function App() {
             )}
           </Droppable>
         </Wrapper>
+        <Footer />
       </DragDropContext>
     </ThemeProvider>
   );

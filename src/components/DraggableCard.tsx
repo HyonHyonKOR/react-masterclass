@@ -41,14 +41,14 @@ const Buttons = styled.div`
 
 const Card = styled.div<ICardProps>`
   position: relative;
-  margin-bottom: 0.5rem;
-  padding: 1.5rem 1rem 1rem 1rem;
+  padding: 1.25rem 0.75rem 0.75rem 0.75rem;
+  margin-bottom: 0.25rem;
   border-radius: 0.5rem;
   box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
   color: ${(props) => props.theme.fontMainColor};
   background-color: ${(props) =>
     props.isDragging ? props.theme.hoverBgColor : props.theme.cardColor};
-  font-size: 1.125rem;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1.25rem;
   word-break: break-all;
@@ -69,11 +69,11 @@ const Information = styled.div<ICardProps>`
   justify-content: space-between;
   align-items: end;
   height: 1rem;
-  margin-top: 0.875rem;
+  margin-top: 0.5rem;
 
   div {
     display: flex;
-    align-items: flex-end;
+    align-items: center;
     gap: 0.25rem;
     color: ${(props) => props.theme.fontSubColor};
     font-size: 0.75rem;
@@ -81,8 +81,9 @@ const Information = styled.div<ICardProps>`
   }
 
   img {
-    width: 1.5rem;
+    width: 1.125rem;
     border-radius: 50%;
+    margin-bottom: 0.25rem;
   }
 `;
 
@@ -144,7 +145,7 @@ function DraggableCard({
           {toDoText}
           <Information isDragging={snapshot.isDragging}>
             <div>
-              <IoTimeOutline size={17} />
+              <IoTimeOutline size={15} />
               <span>{toDoDate}</span>
             </div>
             <img src={avatar} alt="avatar" />
