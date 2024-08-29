@@ -26,7 +26,7 @@ interface IForm {
 
 const BoardHeader = styled.header`
   display: flex;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   justify-content: flex-end;
   button {
     cursor: pointer;
@@ -58,6 +58,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.h2`
+  margin-top: 0.5rem;
   padding: 0.75rem;
   color: ${(props) => props.theme.fontMainColor};
   font-family: "M PLUS 1p";
@@ -171,11 +172,13 @@ function Board({ toDos, boardId, index }: IBoardProps) {
   };
 
   const updateBoard = () => {
-    const newBoardId = window.prompt("Insert New Title")?.trim();
+    const newBoardId = window
+      .prompt("更新したいタイトルをご入力ください🖊️", boardId)
+      ?.trim();
 
     if (newBoardId !== undefined) {
       if (newBoardId === "") {
-        alert("please write a title");
+        alert("テキストを入力してください🖊️");
         return;
       }
 
@@ -183,7 +186,7 @@ function Board({ toDos, boardId, index }: IBoardProps) {
         const allBoards = Object.keys(allToDos);
 
         if (allBoards.includes(newBoardId)) {
-          alert("You can't make same Board");
+          alert("すでに存在しているタイトルです🧐");
           return allToDos;
         }
 
@@ -252,7 +255,7 @@ function Board({ toDos, boardId, index }: IBoardProps) {
                 required: true,
               })}
               type="text"
-              placeholder="Add a Task"
+              placeholder="タスクをご入力ください"
               autoComplete="false"
             />
           </Form>

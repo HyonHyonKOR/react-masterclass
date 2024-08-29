@@ -41,16 +41,18 @@ export default function Header() {
   };
 
   const createBoard = () => {
-    const newBoardId = window.prompt("Add A Board")?.trim();
+    const newBoardId = window
+      .prompt("追加したいタイトルをお入力ください🖊️")
+      ?.trim();
 
     if (newBoardId !== undefined) {
       if (newBoardId === "") {
-        alert("Please Fill in the text");
+        alert("テキストを入力してください🖊️");
         return;
       }
       setToDos((allToDos) => {
         if (Object.keys(allToDos).includes(newBoardId)) {
-          alert("You can't make same Board");
+          alert("同じ名前のボード名は作成できません🧐");
           return allToDos;
         }
 

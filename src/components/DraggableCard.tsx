@@ -38,7 +38,7 @@ const Buttons = styled.div`
   }
 
   :first-child {
-    margin-right: 0.5rem;
+    margin-right: 0.3rem;
   }
 `;
 
@@ -101,11 +101,13 @@ function DraggableCard({
   const setToDos = useSetAtom(toDosAtom);
 
   const updateCard = () => {
-    const inputText = window.prompt("Update Your Task ")?.trim();
+    const inputText = window
+      .prompt("更新したいタスク内容をご入力ください🖊️", toDoText)
+      ?.trim();
 
     if (inputText !== undefined) {
       if (inputText === "") {
-        alert("Please Fill in the text");
+        alert("テキストを入力してください🖊️");
         return;
       }
 
