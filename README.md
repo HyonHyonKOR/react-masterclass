@@ -27,7 +27,7 @@
    <img src="https://img.shields.io/badge/React Icons-E91E63?style=for-the-badge&logo=React&logoColor=white"/>
    <img src="https://img.shields.io/badge/LocalStorage-AECBFA?style=for-the-badge&logo=LocalStorage&logoColor=white"/>
 
-## 環境機能一覧
+## 機能一覧
 　ボード：ボードの作成、修正、追加、順序変更　<br>
 　カード：カードの作成、修正、追加、順序変更、他のボードに移動　<br>
 　UI：ライトモード/ダークモードの切り替え　<br>
